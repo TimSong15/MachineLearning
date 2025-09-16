@@ -190,11 +190,10 @@ class TicTacToeGame:
             validinput = False
             
             user_input = input("Enter two numbers separated by a comma: ")
-            humanrow, humancol = map(int, map(str.strip, user_input.split(',')))
-            print(humanrow)
-            print(humancol)
-            if str(humanrow).isdigit() and str(humancol).isdigit() and 0 <= int(humanrow) <= 2 and 0 <= int(humancol) <= 2 and self.gameboard.entries[humanrow][humancol] == 0:
-                self.gameboard.entries[humanrow][humancol] = 1
+            humanrow, humancol = map(str.strip, user_input.split(','))
+            
+            if str(humanrow).isdigit() and str(humancol).isdigit() and 0 <= int(humanrow) <= 2 and 0 <= int(humancol) <= 2 and self.gameboard.entries[int(humanrow)][int(humancol)] == 0:
+                self.gameboard.entries[int(humanrow)][int(humancol)] = 1
                 self.turn = 2
             else:
                 print("invalid input, please choose a valid space!")
