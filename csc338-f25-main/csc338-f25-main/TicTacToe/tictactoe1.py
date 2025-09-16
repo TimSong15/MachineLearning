@@ -191,13 +191,13 @@ class TicTacToeGame:
             
             user_input = input("Enter two numbers separated by a comma: ")
             humanrow, humancol = map(int, map(str.strip, user_input.split(',')))
-
-            if 0 <= int(humanrow) <= 2 and 0 <= int(humancol) <= 2 and self.gameboard.entries[humanrow][humancol] == 0:
+            print(humanrow)
+            print(humancol)
+            if str(humanrow).isdigit() and str(humancol).isdigit() and 0 <= int(humanrow) <= 2 and 0 <= int(humancol) <= 2 and self.gameboard.entries[humanrow][humancol] == 0:
                 self.gameboard.entries[humanrow][humancol] = 1
                 self.turn = 2
             else:
                 print("invalid input, please choose a valid space!")
-                self.turn = 1
             
         else:
             print("AI is thinking...")
