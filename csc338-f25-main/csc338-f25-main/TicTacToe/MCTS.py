@@ -53,6 +53,20 @@ class GameBoard:
         new_board.entries = [row[:] for row in self.entries]
         return new_board
     
+    def input(self):
+        print("Human, please choose a space!")
+        validinput = False
+            
+        user_input = input("Enter two numbers separated by a comma: ")
+        humanrow, humancol = map(str.strip, user_input.split(','))
+            
+        if str(humanrow).isdigit() and str(humancol).isdigit() and 0 <= int(humanrow) <= 2 and 0 <= int(humancol) <= 2 and self.gameboard.entries[int(humanrow)][int(humancol)] == 0:
+            self.gameboard.entries[int(humanrow)][int(humancol)] = 1
+            self.turn = 2
+        else:
+            print("invalid input, please choose a valid space!")
+
+
 class MCTSNode:
     def __init__(self, bd: GameBoard, parent: None, action: None):
         self.bd = bd             
@@ -158,8 +172,7 @@ class MCTS:
         self.c = 0
         best_child = self.uct_select(root,c=0)
         return best_child.action
-
-    
+  
 
 def MCTS_move(root_state: GameBoard, iterations=2000):
     mcts = MCTS()
@@ -171,12 +184,43 @@ def MCTS_move(root_state: GameBoard, iterations=2000):
     
     return best_action, player, next_state
 
-bd = GameBoard()
-print('-------- before move ----------')
-bd.entries = [[1,0,0],[0,2,0],[0,0,0]]
-bd.print_bd()
-print('-------- after MCTS move ----------')
-best_action, next_player, next_bd = MCTS_move(bd, iterations=1000)
-print("Best action:", best_action, "for player", next_player)
-next_bd.print_bd()
-print('----------------------------------')
+
+def tictactoe(self):
+    
+    bd = GameBoard()
+
+    playerCheck = input('Do you wish to play X or play O?')
+
+    if playerCheck == 'X':
+        playerCheck = 1
+        comp = 2
+
+    else:
+        playerCheck = 2
+        comp = 1
+
+    while True:
+        
+        if bd.check_nextplayer() == playerCheck:
+            print('type your move:')
+            humanrow, humancol = bd.input()
+            bd.entries[humanrow][humancol] = playerCheck
+
+        else:
+            print('AI is thinking')
+            move, next_player, next_bd = MCTS_move(bd, iterations = 2000)
+            comprow, compcol = move
+            bd.entries[comprow][compcol] = comp
+
+        bd.print_bd()
+        winner = bd.checkwin()
+
+        if winner == 3:
+            print('Tie')
+            break
+        elif winner == 1:
+            print('X wins')
+            break
+        elif winner == 2:
+            print('O wins')
+            break
