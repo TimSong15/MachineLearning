@@ -54,18 +54,21 @@ class GameBoard:
         return new_board
     
     def input(self):
+        
         print("Human, please choose a space!")
         validinput = False
+        
+        while validinput == False:
+            user_input = input("Enter two numbers separated by a comma: ")
+            humanrow, humancol = map(str.strip, user_input.split(','))
+        
+            if humanrow.isdigit() and humancol.isdigit() and 0 <= int(humanrow) <= 2 and 0 <= int(humancol) <= 2 and self.entries[int(humanrow)][int(humancol)] == 0:
+                r, c = int(humanrow), int(humancol)
+                validinput = True
+                return r, c
+            else:
+                print("invalid input, please choose a valid space!")
             
-        user_input = input("Enter two numbers separated by a comma: ")
-        humanrow, humancol = map(str.strip, user_input.split(','))
-            
-        if str(humanrow).isdigit() and str(humancol).isdigit() and 0 <= int(humanrow) <= 2 and 0 <= int(humancol) <= 2 and self.gameboard.entries[int(humanrow)][int(humancol)] == 0:
-            self.gameboard.entries[int(humanrow)][int(humancol)] = 1
-            self.turn = 2
-        else:
-            print("invalid input, please choose a valid space!")
-
 
 class MCTSNode:
     def __init__(self, bd: GameBoard, parent: None, action: None):
@@ -185,11 +188,11 @@ def MCTS_move(root_state: GameBoard, iterations=2000):
     return best_action, player, next_state
 
 
-def tictactoe(self):
+def tictactoe():
     
     bd = GameBoard()
 
-    playerCheck = input('Do you wish to play X or play O?')
+    playerCheck = input('Do you wish to play X or play O?').strip().upper()
 
     if playerCheck == 'X':
         playerCheck = 1
@@ -201,13 +204,13 @@ def tictactoe(self):
 
     while True:
         
-        if bd.check_nextplayer() == playerCheck:
+        if bd.check_nextplayer(bd.entries) == playerCheck:
             print('type your move:')
             humanrow, humancol = bd.input()
             bd.entries[humanrow][humancol] = playerCheck
 
         else:
-            print('AI is thinking')
+            print('AI is thinking...')
             move, next_player, next_bd = MCTS_move(bd, iterations = 2000)
             comprow, compcol = move
             bd.entries[comprow][compcol] = comp
@@ -224,3 +227,5 @@ def tictactoe(self):
         elif winner == 2:
             print('O wins')
             break
+
+tictactoe()
